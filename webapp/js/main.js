@@ -1,6 +1,5 @@
 // ============================================
 // MULTI-HUB - OPTIMIZED JAVASCRIPT
-// Clean, Organized, and Fully Functional
 // ============================================
 
 // Wait for DOM to be fully loaded
@@ -921,4 +920,29 @@ if (typeof module !== 'undefined' && module.exports) {
         validateSignupForm,
         validateLoginForm
     };
+
 }
+
+
+// Make admin tables mobile-friendly
+function makeTablesResponsive() {
+    const tables = document.querySelectorAll('.admin-table');
+    
+    tables.forEach(table => {
+        // Add wrapper for horizontal scroll
+        if (!table.parentElement.classList.contains('table-responsive')) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'table-responsive';
+            wrapper.style.overflowX = 'auto';
+            table.parentElement.insertBefore(wrapper, table);
+            wrapper.appendChild(table);
+        }
+        
+        // Add responsive class to table
+        table.classList.add('table-responsive');
+    });
+}
+
+// Run on page load and window resize
+document.addEventListener('DOMContentLoaded', makeTablesResponsive);
+window.addEventListener('resize', makeTablesResponsive);
