@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard - Multi-Hub</title>
+    <link rel="stylesheet" href="fonts/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+       
+            <div class="logo">
+                <i class="fas fa-hubspot"></i> Multi-Hub
+            </div>
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="browse.html"><i class="fas fa-search"></i> Browse</a>
+                <a href="create-listing.html"><i class="fas fa-plus-circle"></i> Create Listing</a>
+                <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="hero">
+            <h1>Welcome back, <span id="userName">John Doe</span>!</h1>
+            <p>Here's what's happening with your account today.</p>
+            <div class="rating-display">
+                <div class="rating-number">4.8</div>
+                <div class="rating-label">Your Rating</div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-list"></i>
+                <h3 id="activeListings">3</h3>
+                <p>Active Listings</p>
+            </div>
+            
+            <div class="stat-card">
+                <i class="fas fa-eye"></i>
+                <h3 id="totalViews">156</h3>
+                <p>Total Views</p>
+            </div>
+            
+            <div class="stat-card">
+                <i class="fas fa-comments"></i>
+                <h3 id="messages">5</h3>
+                <p>New Messages</p>
+            </div>
+            
+            <div class="stat-card">
+                <i class="fas fa-star"></i>
+                <h3 id="reviews">24</h3>
+                <p>Total Reviews</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="dashboard-content">
+            <!-- My Listings Section -->
+            <div class="dashboard-section">
+                <h2><i class="fas fa-list"></i> My Listings</h2>
+                <a href="create-listing.html" class="btn add-new-btn">
+                    <i class="fas fa-plus"></i> Add New
+                </a>
+                
+                <div id="myListings" class="listings-container">
+                    <!-- Listings will be loaded here -->
+                </div>
+                
+                <div class="view-all-container">
+                    <a href="browse.html?my=true" class="btn">
+                        <i class="fas fa-list"></i> View All My Listings
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="dashboard-section">
+                <h2><i class="fas fa-history"></i> Recent Activity</h2>
+                
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="activity-details">
+                            <p class="activity-title">Someone viewed your listing</p>
+                            <p class="activity-time">2 hours ago</p>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="activity-details">
+                            <p class="activity-title">New review received</p>
+                            <p class="activity-time">Yesterday</p>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-comment"></i>
+                        </div>
+                        <div class="activity-details">
+                            <p class="activity-title">New message from Sarah</p>
+                            <p class="activity-time">2 days ago</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="view-all-container">
+                    <a href="#" class="btn">
+                        <i class="fas fa-bell"></i> View All Notifications
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="dashboard-section">
+            <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+            
+            <div class="quick-actions-grid">
+                <a href="create-listing.html" class="quick-action-btn">
+                    <i class="fas fa-plus-circle"></i>
+                    Create New Listing
+                </a>
+                
+                <a href="profile.html" class="quick-action-btn">
+                    <i class="fas fa-user-edit"></i>
+                    Edit Profile
+                </a>
+                
+                <a href="browse.html" class="quick-action-btn">
+                    <i class="fas fa-search"></i>
+                    Browse Listings
+                </a>
+                
+                <a href="#" class="quick-action-btn">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Multi-Hub. All rights reserved.</p>
+            <p>Your personal dashboard</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+</body>
+</html>
