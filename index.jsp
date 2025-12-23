@@ -19,7 +19,7 @@
                 <i class="fas fa-bars"></i>
             </button>
             <div class="nav-links" id="navLinks">
-                <a href="${pageContext.request.contextPath}/browse.jsp"><i class="fas fa-search"></i> Browse</a>
+                <a href="${pageContext.request.contextPath}webapp/browse.jsp"><i class="fas fa-search"></i> Browse</a>
                 
                 <%-- Check if user is logged in --%>
                 <%
