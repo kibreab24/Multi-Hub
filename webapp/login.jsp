@@ -1,11 +1,12 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Multi-Hub</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="fonts/css/all.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/fonts/css/all.min.css">
 </head>
 <body>
     <!-- Navigation -->
@@ -15,8 +16,8 @@
             <i class="fas fa-bars"></i>
         </button>
         <div class="nav-links" id="navLinks">
-            <a href="../index.html"><i class="fas fa-home"></i> Home</a>
-            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+            <a href="${pageContext.request.contextPath}/index.jsp"><i class="fas fa-home"></i> Home</a>
+            <a href="${pageContext.request.contextPath}/signup.jsp"><i class="fas fa-user-plus"></i> Sign Up</a>
         </div>
     </nav>
 
@@ -38,8 +39,15 @@
             </div>
         <% } %>
         
+        <!-- Logout message -->
+        <% if (request.getParameter("logout") != null) { %>
+            <div style="background: #d1ecf1; color: #0c5460; padding: 12px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+                <i class="fas fa-info-circle"></i> You have been logged out successfully.
+            </div>
+        <% } %>
+        
         <!-- Login Form -->
-        <form action="login" method="post">
+        <form action="${pageContext.request.contextPath}/login" method="post">
             <!-- Email -->
             <div style="margin-bottom: 20px;">
                 <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">
@@ -48,9 +56,8 @@
                 </label>
                 <input type="email" name="email" required 
                        placeholder="Enter your email address"
-                       style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; transition: border 0.3s;"
-                       onfocus="this.style.borderColor='#4a6cf7'; this.style.outline='none';"
-                       onblur="this.style.borderColor='#ddd';">
+                       value="<%= request.getParameter("email") != null ? request.getParameter("email") : "" %>"
+                       style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;">
             </div>
             
             <!-- Password -->
@@ -61,16 +68,12 @@
                 </label>
                 <input type="password" name="password" required 
                        placeholder="Enter your password"
-                       style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; transition: border 0.3s;"
-                       onfocus="this.style.borderColor='#4a6cf7'; this.style.outline='none';"
-                       onblur="this.style.borderColor='#ddd';">
+                       style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;">
                 
                 <!-- Forgot Password -->
                 <div style="text-align: right; margin-top: 8px;">
                     <a href="#" onclick="forgotPassword()" 
-                       style="color: #4a6cf7; font-size: 14px; text-decoration: none; transition: color 0.3s;"
-                       onmouseover="this.style.textDecoration='underline';"
-                       onmouseout="this.style.textDecoration='none';">
+                       style="color: #4a6cf7; font-size: 14px; text-decoration: none;">
                         Forgot your password?
                     </a>
                 </div>
@@ -87,46 +90,17 @@
             
             <!-- Submit Button -->
             <button type="submit" 
-                    style="width: 100%; padding: 14px; background: linear-gradient(135deg, #4a6cf7 0%, #3a5ce5 100%); color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(74, 108, 247, 0.3);"
-                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(74, 108, 247, 0.4)';"
-                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(74, 108, 247, 0.3)';">
+                    style="width: 100%; padding: 14px; background: #4a6cf7; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: 600; cursor: pointer;">
                 <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> 
                 Login to Your Account
             </button>
         </form>
         
-        <!-- Alternative Login Options -->
-        <div style="margin: 30px 0; text-align: center; position: relative;">
-            <div style="height: 1px; background: #eee; position: absolute; top: 50%; left: 0; right: 0;"></div>
-            <span style="background: white; padding: 0 15px; color: #888; font-size: 14px; position: relative;">
-                Or continue with
-            </span>
-        </div>
-        
-        <!-- Social Login Buttons -->
-        <div style="display: flex; gap: 15px; margin-bottom: 30px;">
-            <button type="button" onclick="socialLogin('google')"
-                    style="flex: 1; padding: 12px; background: white; border: 1px solid #ddd; border-radius: 5px; color: #db4437; font-weight: 500; cursor: pointer; transition: all 0.3s;"
-                    onmouseover="this.style.borderColor='#db4437'; this.style.background='#fce8e6';"
-                    onmouseout="this.style.borderColor='#ddd'; this.style.background='white';">
-                <i class="fab fa-google" style="margin-right: 8px;"></i> Google
-            </button>
-            
-            <button type="button" onclick="socialLogin('facebook')"
-                    style="flex: 1; padding: 12px; background: white; border: 1px solid #ddd; border-radius: 5px; color: #4267B2; font-weight: 500; cursor: pointer; transition: all 0.3s;"
-                    onmouseover="this.style.borderColor='#4267B2'; this.style.background='#e7f3ff';"
-                    onmouseout="this.style.borderColor='#ddd'; this.style.background='white';">
-                <i class="fab fa-facebook" style="margin-right: 8px;"></i> Facebook
-            </button>
-        </div>
-        
         <!-- Signup Link -->
-        <div style="text-align: center; margin-top: 30px; padding-top: 25px; border-top: 1px solid #eee;">
+        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
             <p style="color: #666; margin-bottom: 5px;">Don't have an account?</p>
-            <a href="signup.html" 
-               style="color: #4a6cf7; font-weight: 600; text-decoration: none; font-size: 16px; transition: color 0.3s;"
-               onmouseover="this.style.textDecoration='underline'; color='#3a5ce5';"
-               onmouseout="this.style.textDecoration='none'; color='#4a6cf7';">
+            <a href="${pageContext.request.contextPath}/signup.jsp" 
+               style="color: #4a6cf7; font-weight: 600; text-decoration: none; font-size: 16px;">
                 <i class="fas fa-user-plus" style="margin-right: 5px;"></i> 
                 Create New Account
             </a>
@@ -141,20 +115,21 @@
         </div>
     </div>
 
-    <script src="js/main.js"></script>
+    <script src="${pageContext.request.contextPath}/js/main.js"></script>
     
     <script>
         // Forgot password function
         function forgotPassword() {
-            const email = document.querySelector('input[name="email"]').value;
+            const emailInput = document.querySelector('input[name="email"]');
+            const email = emailInput.value;
             
             if (email && email.includes('@')) {
                 if (confirm('Send password reset instructions to:\n' + email + '?')) {
-                    alert('Password reset email sent! Please check your inbox.\n\n(Note: This is a demo. In production, this would send a real email.)');
+                    alert('Password reset email sent! Please check your inbox.');
                 }
             } else {
                 alert('Please enter a valid email address first.');
-                document.querySelector('input[name="email"]').focus();
+                emailInput.focus();
             }
         }
         
@@ -170,13 +145,13 @@
             const rememberCheckbox = document.getElementById('remember');
             const emailInput = document.querySelector('input[name="email"]');
             
-            // Load saved email if exists
+            // Load saved email from localStorage
             if (localStorage.getItem('rememberEmail')) {
                 emailInput.value = localStorage.getItem('rememberEmail');
                 rememberCheckbox.checked = true;
             }
             
-            // Save email on form submit if "Remember me" is checked
+            // Save to localStorage on form submit
             document.querySelector('form').addEventListener('submit', function() {
                 if (rememberCheckbox.checked && emailInput.value) {
                     localStorage.setItem('rememberEmail', emailInput.value);
@@ -185,19 +160,6 @@
                 }
             });
         });
-        
-        // Add some interactivity to form
-        const inputs = document.querySelectorAll('input[type="email"], input[type="password"]');
-        inputs.forEach(input => {
-            input.addEventListener('input', function() {
-                if (this.value.trim() !== '') {
-                    this.style.background = '#f8f9ff';
-                } else {
-                    this.style.background = 'white';
-                }
-            });
-        });
     </script>
 </body>
 </html>
-
