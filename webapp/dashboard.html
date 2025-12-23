@@ -10,21 +10,19 @@
 <body>
     <!-- Navigation -->
     <nav class="navbar">
-       
-            <div class="logo">
-                <i class="fas fa-hubspot"></i> Multi-Hub
-            </div>
-            <button class="menu-toggle" id="menuToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="nav-links" id="navLinks">
-                <a href="../index.html"><i class="fas fa-home"></i> Home</a>
-                <a href="browse.html"><i class="fas fa-search"></i> Browse</a>
-                <a href="create-listing.html"><i class="fas fa-plus-circle"></i> Create Listing</a>
-                <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
-                <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            </div>
-        
+        <div class="logo">
+            <i class="fas fa-hubspot"></i> Multi-Hub
+        </div>
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links" id="navLinks">
+            <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="browse.html"><i class="fas fa-search"></i> Browse</a>
+            <a href="create-listing.html"><i class="fas fa-plus-circle"></i> Create Listing</a>
+            <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
     </nav>
 
     <!-- Dashboard Content -->
@@ -76,7 +74,16 @@
                 </a>
                 
                 <div id="myListings" class="listings-container">
-                    <!-- Listings will be loaded here -->
+                    <!-- Demo listings -->
+                    <div class="listing-preview">
+                        <h3>Web Design Tutoring</h3>
+                        <p><i class="fas fa-tag"></i> Skills Hub | <i class="fas fa-money-bill-wave"></i> $25/hour</p>
+                        <p><i class="fas fa-star"></i> 4.5 rating | <i class="fas fa-eye"></i> 45 views</p>
+                        <div class="listing-actions">
+                            <button class="btn" onclick="editListing(1)">Edit</button>
+                            <button class="btn btn-danger" onclick="deleteListing(1)">Delete</button>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="view-all-container">
@@ -123,7 +130,7 @@
                 </div>
                 
                 <div class="view-all-container">
-                    <a href="#" class="btn">
+                    <a href="#" class="btn" onclick="viewNotifications()">
                         <i class="fas fa-bell"></i> View All Notifications
                     </a>
                 </div>
@@ -150,7 +157,7 @@
                     Browse Listings
                 </a>
                 
-                <a href="#" class="quick-action-btn">
+                <a href="#" class="quick-action-btn" onclick="openSettings()">
                     <i class="fas fa-cog"></i>
                     Settings
                 </a>
@@ -168,6 +175,56 @@
 
     <!-- JavaScript -->
     <script src="js/main.js"></script>
+    <script>
+        // Simulate user data loading
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is "logged in" (for demo)
+            const isLoggedIn = localStorage.getItem('multiHubLoggedIn') === 'true';
+            
+            if (!isLoggedIn) {
+                // Redirect to login if not logged in (for demo)
+                if (confirm('Demo: You need to login first. Simulate login?')) {
+                    localStorage.setItem('multiHubLoggedIn', 'true');
+                    localStorage.setItem('multiHubUserName', 'John Doe');
+                    location.reload();
+                } else {
+                    window.location.href = 'login.html';
+                }
+            } else {
+                // Load user data
+                const userName = localStorage.getItem('multiHubUserName') || 'User';
+                document.getElementById('userName').textContent = userName;
+            }
+        });
+        
+        // Logout function
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('multiHubLoggedIn');
+                localStorage.removeItem('multiHubUserName');
+                window.location.href = 'login.html?logout=true';
+            }
+        });
+        
+        // Demo functions
+        function editListing(id) {
+            alert('Demo: Editing listing #' + id + '\n\nIn production, this would open edit form.');
+        }
+        
+        function deleteListing(id) {
+            if (confirm('Delete this listing?')) {
+                alert('Demo: Listing #' + id + ' deleted.\n\nIn production, this would remove from database.');
+            }
+        }
+        
+        function viewNotifications() {
+            alert('Demo: Opening notifications panel.\n\nIn production, this would show all notifications.');
+        }
+        
+        function openSettings() {
+            alert('Demo: Opening settings panel.\n\nIn production, this would show user settings.');
+        }
+    </script>
 </body>
-
 </html>
