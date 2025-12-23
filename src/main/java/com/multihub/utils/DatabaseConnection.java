@@ -12,57 +12,75 @@ public class DatabaseConnection {
     public static Connection getConnection() {
         if (connection == null) {
             try {
-                // Load database configuration
+                // Load database configuration from properties file
                 Properties props = new Properties();
                 InputStream input = DatabaseConnection.class.getClassLoader()
                     .getResourceAsStream("database.properties");
                 
                 if (input == null) {
-                    // For development - use H2 in-memory database
-                    String url = "jdbc:h2:mem:multihub;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS multihub";
-                    String user = "sa";
-                    String password = "";
-                    
-                    connection = DriverManager.getConnection(url, user, password);
-                    createTables(connection); // Create initial tables
-                    
-                    System.out.println("✅ Connected to H2 in-memory database (development)");
-                } else {
-                    // Production - load from properties file
-                    props.load(input);
-                    String url = props.getProperty("db.url");
-                    String user = props.getProperty("db.user");
-                    String password = props.getProperty("db.password");
-                    
-                    connection = DriverManager.getConnection(url, user, password);
-                    System.out.println("✅ Connected to production database");
+                    throw new RuntimeException("❌ database.properties file not found! "
+                        + "Create it in src/main/resources/");
                 }
                 
+                props.load(input);
+                String url = props.getProperty("db.url");
+                String user = props.getProperty("db.user");
+                String password = props.getProperty("db.password");
+                
+                System.out.println("🔗 Connecting to: " + url);
+                System.out.println("👤 User: " + user);
+                
+                // Load PostgreSQL driver
+                Class.forName("org.postgresql.Driver");
+                
+                // Create connection
+                connection = DriverManager.getConnection(url, user, password);
+                System.out.println("✅ Connected to Supabase PostgreSQL database!");
+                
+                // Test the connection with a simple query
+                testConnection(connection);
+                
             } catch (Exception e) {
-                System.out.println("❌ Database connection failed: " + e.getMessage());
+                System.out.println("❌ Database connection failed!");
+                System.out.println("Error: " + e.getMessage());
                 e.printStackTrace();
+                
+                // Provide helpful debugging info
+                System.out.println("\n🔧 DEBUGGING TIPS:");
+                System.out.println("1. Check if database.properties file exists in src/main/resources/");
+                System.out.println("2. Verify Supabase password is correct");
+                System.out.println("3. Check if Connection Pooling is disabled in Supabase");
+                System.out.println("4. Make sure pom.xml has PostgreSQL dependency");
             }
         }
         return connection;
     }
     
-    private static void createTables(Connection conn) throws SQLException {
-        String createUsersTable = """
-            CREATE TABLE IF NOT EXISTS users (
-                id VARCHAR(50) PRIMARY KEY,
-                email VARCHAR(255) UNIQUE NOT NULL,
-                password_hash VARCHAR(255) NOT NULL,
-                full_name VARCHAR(100),
-                role VARCHAR(20),
-                is_verified BOOLEAN DEFAULT FALSE,
-                is_approved BOOLEAN DEFAULT FALSE,
-                rating DECIMAL(3,2) DEFAULT 0.00,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-            """;
+    private static void testConnection(Connection conn) throws SQLException {
+        var stmt = conn.createStatement();
+        var rs = stmt.executeQuery("SELECT version()");
+        if (rs.next()) {
+            System.out.println("📊 Database: " + rs.getString(1));
+        }
         
-        conn.createStatement().execute(createUsersTable);
-        System.out.println("✅ Created users table");
+        // Check if users table exists
+        rs = stmt.executeQuery(
+            "SELECT EXISTS (SELECT FROM information_schema.tables " +
+            "WHERE table_schema = 'public' AND table_name = 'users')"
+        );
+        if (rs.next()) {
+            System.out.println("📋 Users table exists: " + rs.getBoolean(1));
+        }
+    }
+    
+    public static void main(String[] args) {
+        System.out.println("🚀 Testing database connection...");
+        Connection conn = getConnection();
+        if (conn != null) {
+            System.out.println("\n🎉 SUCCESS! Database connection is working!");
+        } else {
+            System.out.println("\n❌ FAILED! Could not connect to database.");
+        }
     }
     
     public static void closeConnection() {
