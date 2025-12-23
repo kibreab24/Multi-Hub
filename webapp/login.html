@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Multi-Hub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="fonts/css/all.min.css">
+    <style>
+        .message {
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">Multi-Hub</div>
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links" id="navLinks">
+            <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+        </div>
+    </nav>
+
+    <!-- Login Form -->
+    <div class="container" style="max-width: 400px; margin: 50px auto;">
+        <h2 style="text-align: center; margin-bottom: 30px;">Login to Multi-Hub</h2>
+        
+        <!-- Message Container (for demo purposes) -->
+        <div id="messageContainer">
+            <!-- Messages will appear here via JavaScript -->
+        </div>
+        
+        <!-- Login Form -->
+        <form id="loginForm" method="post">
+            <!-- Email -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">
+                    <i class="fas fa-envelope" style="color: #4a6cf7; margin-right: 8px;"></i> 
+                    Email Address
+                </label>
+                <input type="email" id="email" name="email" required 
+                       placeholder="Enter your email address"
+                       style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;">
+            </div>
+            
+            <!-- Password -->
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #333;">
+                    <i class="fas fa-lock" style="color: #4a6cf7; margin-right: 8px;"></i> 
+                    Password
+                </label>
+                <input type="password" id="password" name="password" required 
+                       placeholder="Enter your password"
+                       style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;">
+                
+                <!-- Forgot Password -->
+                <div style="text-align: right; margin-top: 8px;">
+                    <a href="#" onclick="forgotPassword()" 
+                       style="color: #4a6cf7; font-size: 14px; text-decoration: none;">
+                        Forgot your password?
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Remember Me -->
+            <div style="margin-bottom: 25px; display: flex; align-items: center;">
+                <input type="checkbox" id="remember" name="remember" 
+                       style="margin-right: 10px; width: 18px; height: 18px;">
+                <label for="remember" style="font-size: 14px; color: #555; cursor: pointer;">
+                    Remember me on this device
+                </label>
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="button" onclick="simulateLogin()"
+                    style="width: 100%; padding: 14px; background: #4a6cf7; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> 
+                Login to Your Account
+            </button>
+        </form>
+        
+        <!-- Alternative Login Options -->
+        <div style="margin: 30px 0; text-align: center; position: relative;">
+            <div style="height: 1px; background: #eee; position: absolute; top: 50%; left: 0; right: 0;"></div>
+            <span style="background: white; padding: 0 15px; color: #888; font-size: 14px; position: relative;">
+                Or continue with
+            </span>
+        </div>
+        
+        <!-- Social Login Buttons -->
+        <div style="display: flex; gap: 15px; margin-bottom: 30px;">
+            <button type="button" onclick="socialLogin('google')"
+                    style="flex: 1; padding: 12px; background: white; border: 1px solid #ddd; border-radius: 5px; color: #db4437; font-weight: 500; cursor: pointer;">
+                <i class="fab fa-google" style="margin-right: 8px;"></i> Google
+            </button>
+            
+            <button type="button" onclick="socialLogin('facebook')"
+                    style="flex: 1; padding: 12px; background: white; border: 1px solid #ddd; border-radius: 5px; color: #4267B2; font-weight: 500; cursor: pointer;">
+                <i class="fab fa-facebook" style="margin-right: 8px;"></i> Facebook
+            </button>
+        </div>
+        
+        <!-- Signup Link -->
+        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+            <p style="color: #666; margin-bottom: 5px;">Don't have an account?</p>
+            <a href="signup.html" 
+               style="color: #4a6cf7; font-weight: 600; text-decoration: none; font-size: 16px;">
+                <i class="fas fa-user-plus" style="margin-right: 5px;"></i> 
+                Create New Account
+            </a>
+        </div>
+        
+        <!-- Admin Note -->
+        <div style="margin-top: 25px; padding: 15px; background: #f8f9ff; border-radius: 5px; text-align: center;">
+            <p style="color: #666; font-size: 14px; margin: 0;">
+                <i class="fas fa-user-shield" style="color: #4a6cf7; margin-right: 5px;"></i>
+                <strong>Admin Access:</strong> Use admin credentials for moderation panel
+            </p>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    
+    <script>
+        // Check URL for demo messages
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const messageContainer = document.getElementById('messageContainer');
+            
+            // Check for "registered" parameter
+            if (urlParams.has('registered')) {
+                showMessage('Registration successful! Please login.', 'success');
+            }
+            
+            // Check for "error" parameter
+            if (urlParams.has('error')) {
+                showMessage(decodeURIComponent(urlParams.get('error')), 'error');
+            }
+            
+            // Check for "logout" parameter
+            if (urlParams.has('logout')) {
+                showMessage('You have been logged out successfully.', 'info');
+            }
+            
+            // Load saved email if "Remember me" was checked
+            if (localStorage.getItem('rememberEmail')) {
+                document.getElementById('email').value = localStorage.getItem('rememberEmail');
+                document.getElementById('remember').checked = true;
+            }
+        });
+        
+        // Show message function
+        function showMessage(text, type) {
+            const messageContainer = document.getElementById('messageContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            let icon = 'fa-info-circle';
+            if (type === 'success') icon = 'fa-check-circle';
+            if (type === 'error') icon = 'fa-exclamation-circle';
+            
+            messageDiv.innerHTML = `<i class="fas ${icon}"></i> ${text}`;
+            messageContainer.appendChild(messageDiv);
+            messageDiv.style.display = 'block';
+        }
+        
+        // Forgot password function
+        function forgotPassword() {
+            const emailInput = document.getElementById('email');
+            const email = emailInput.value;
+            
+            if (email && email.includes('@')) {
+                if (confirm('Send password reset instructions to:\n' + email + '?')) {
+                    showMessage('Password reset email sent! Please check your inbox.', 'info');
+                }
+            } else {
+                alert('Please enter a valid email address first.');
+                emailInput.focus();
+            }
+        }
+        
+        // Social login function
+        function socialLogin(provider) {
+            showMessage(`${provider.charAt(0).toUpperCase() + provider.slice(1)} login would connect to backend in production.`, 'info');
+        }
+        
+        // Simulate login (for demo purposes)
+        function simulateLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+            
+            // Basic validation
+            if (!email || !password) {
+                showMessage('Please enter both email and password.', 'error');
+                return;
+            }
+            
+            if (!email.includes('@')) {
+                showMessage('Please enter a valid email address.', 'error');
+                return;
+            }
+            
+            // Save to localStorage if "Remember me" is checked
+            if (remember && email) {
+                localStorage.setItem('rememberEmail', email);
+            } else {
+                localStorage.removeItem('rememberEmail');
+            }
+            
+            // Simulate successful login
+            showMessage('Login successful! Redirecting to dashboard...', 'success');
+            
+            // Redirect after delay
+            setTimeout(() => {
+                // In real app, this would go to dashboard.jsp
+                // For demo, go to dashboard.html
+                window.location.href = 'dashboard.html';
+            }, 1500);
+        }
+        
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            simulateLogin();
+        });
+    </script>
+</body>
+</html>
