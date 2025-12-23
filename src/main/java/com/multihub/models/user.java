@@ -16,17 +16,18 @@ public class User {
     // Constructors
     public User() {}
     
-    public User(String email, String fullName, String role) {
+    public User(String id, String email, String fullName, String role) {
+        this.id = id;
         this.email = email;
         this.fullName = fullName;
         this.role = role;
         this.createdAt = new Date();
-        this.rating = 0.0;
         this.isVerified = false;
         this.isApproved = false;
+        this.rating = 0.0;
     }
     
-    // Getters and Setters (generate these)
+    // Getters and Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     
@@ -36,5 +37,21 @@ public class User {
     public String getPasswordHash() { return passwordHash; }
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
     
-    // ... Add all other getters/setters
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+    
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
+    
+    public boolean isVerified() { return isVerified; }
+    public void setVerified(boolean verified) { isVerified = verified; }
+    
+    public boolean isApproved() { return isApproved; }
+    public void setApproved(boolean approved) { isApproved = approved; }
+    
+    public double getRating() { return rating; }
+    public void setRating(double rating) { this.rating = rating; }
+    
+    public Date getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
 }
