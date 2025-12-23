@@ -1,11 +1,12 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multi-Hub | Skills • Tools • Jobs</title>
-    <link rel="stylesheet" href="webapp/css/style.css">
-    <link rel="stylesheet" href="webapp/fonts/css/all.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/fonts/css/all.min.css">
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -18,10 +19,24 @@
                 <i class="fas fa-bars"></i>
             </button>
             <div class="nav-links" id="navLinks">
-                <a href="webapp/browse.html"><i class="fas fa-search"></i> Browse</a>
-                <a href="webapp/login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
-                <a href="webapp/signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
-                <a href="webapp/admin.html"><i class="fas fa-user-shield"></i> Admin</a>
+                <a href="${pageContext.request.contextPath}/browse.jsp"><i class="fas fa-search"></i> Browse</a>
+                
+                <%-- Check if user is logged in --%>
+                <%
+                    HttpSession sessionObj = request.getSession(false);
+                    if (sessionObj != null && sessionObj.getAttribute("user") != null) {
+                        // User is logged in
+                        String userRole = (String) sessionObj.getAttribute("userRole");
+                %>
+                        <a href="${pageContext.request.contextPath}/dashboard.jsp"><i class="fas fa-user"></i> Dashboard</a>
+                        <% if ("admin".equals(userRole)) { %>
+                            <a href="${pageContext.request.contextPath}/admin.jsp"><i class="fas fa-user-shield"></i> Admin</a>
+                        <% } %>
+                        <a href="${pageContext.request.contextPath}/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <% } else { %>
+                        <a href="${pageContext.request.contextPath}/login.jsp"><i class="fas fa-sign-in-alt"></i> Login</a>
+                        <a href="${pageContext.request.contextPath}/signup.jsp"><i class="fas fa-user-plus"></i> Sign Up</a>
+                <% } %>
             </div>
         </div>
     </nav>
@@ -37,9 +52,9 @@
         </div>
     </section>
 
-    <!-- Categories Section - FIXED LINKS -->
+    <!-- Categories Section -->
     <section class="categories">
-        <div class="category-card" onclick="window.location='webapp/browse.html?type=skill'">
+        <div class="category-card" onclick="window.location='${pageContext.request.contextPath}/browse.jsp?type=skill'">
             <div class="category-icon">
                 <i class="fas fa-laptop-code"></i>
             </div>
@@ -48,7 +63,7 @@
             <button class="btn">Browse Skills</button>
         </div>
 
-        <div class="category-card" onclick="window.location='webapp/browse.html?type=tool'">
+        <div class="category-card" onclick="window.location='${pageContext.request.contextPath}/browse.jsp?type=tool'">
             <div class="category-icon">
                 <i class="fas fa-tools"></i>
             </div>
@@ -57,7 +72,7 @@
             <button class="btn">Browse Tools</button>
         </div>
 
-        <div class="category-card" onclick="window.location='webapp/browse.html?type=job'">
+        <div class="category-card" onclick="window.location='${pageContext.request.contextPath}/browse.jsp?type=job'">
             <div class="category-icon">
                 <i class="fas fa-briefcase"></i>
             </div>
@@ -74,7 +89,7 @@
 
             <div class="featured-grid">
                 <!-- Listing 1 -->
-                <div class="listing-card" onclick="window.location='webapp/browse.html?id=1'">
+                <div class="listing-card" onclick="window.location='${pageContext.request.contextPath}/browse.jsp?id=1'">
                     <div class="listing-image">
                         <i class="fas fa-code"></i>
                     </div>
@@ -101,7 +116,7 @@
                 </div>
 
                 <!-- Listing 2 -->
-                <div class="listing-card" onclick="window.location='webapp/browse.html?id=2'">
+                <div class="listing-card" onclick="window.location='${pageContext.request.contextPath}/browse.jsp?id=2'">
                     <div class="listing-image">
                         <i class="fas fa-tools"></i>
                     </div>
@@ -128,7 +143,7 @@
                 </div>
 
                 <!-- Listing 3 -->
-                <div class="listing-card" onclick="window.location='webapp/browse.html?id=3'">
+                <div class="listing-card" onclick="window.location='${pageContext.request.contextPath}/browse.jsp?id=3'">
                     <div class="listing-image">
                         <i class="fas fa-briefcase"></i>
                     </div>
@@ -156,7 +171,7 @@
             </div>
 
             <div class="view-all">
-                <a href="webapp/browse.html" class="btn">
+                <a href="${pageContext.request.contextPath}/browse.jsp" class="btn">
                     <i class="fas fa-list"></i> View All Listings
                 </a>
             </div>
@@ -165,18 +180,17 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container"> <!-- Added container here too -->
+        <div class="container">
             <p>&copy; 2025 Multi-Hub. All rights reserved.</p>
             <p>Mekelle University</p>
             <div class="footer-links">
-                <a href="about.html">About</a> |
-                <a href="contact.html">Contact</a> |
-                <a href="privacy.html">Privacy</a>
+                <a href="#">About</a> |
+                <a href="#">Contact</a> |
+                <a href="#">Privacy</a>
             </div>
         </div>
     </footer>
 
-    <script src="webapp/js/main.js"></script>
+    <script src="${pageContext.request.contextPath}/js/main.js"></script>
 </body>
-
 </html>
