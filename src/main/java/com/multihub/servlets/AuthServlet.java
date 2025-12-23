@@ -7,13 +7,12 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 
-@WebServlet("/auth/*")
+@WebServlet(name = "AuthServlet", urlPatterns = {"/register", "/login", "/logout"})
 public class AuthServlet extends HttpServlet {
     private UserDAO userDAO;
     
     @Override
     public void init() {
-        // Initialize database connection
         userDAO = new UserDAO();
     }
     
@@ -21,11 +20,9 @@ public class AuthServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        String action = request.getPathInfo();
+        String path = request.getServletPath();
         
-        if (action == null) action = "";
-        
-        switch (action) {
+        switch (path) {
             case "/register":
                 handleRegister(request, response);
                 break;
@@ -37,6 +34,19 @@ public class AuthServlet extends HttpServlet {
         }
     }
     
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        String path = request.getServletPath();
+        
+        if (path.equals("/logout")) {
+            handleLogout(request, response);
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
+    }
+    
     private void handleRegister(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
@@ -45,19 +55,35 @@ public class AuthServlet extends HttpServlet {
         String fullName = request.getParameter("fullName");
         String role = request.getParameter("role");
         
-        // Basic validation
-        if (email == null || password == null || fullName == null || role == null) {
+        // Validation
+        if (email == null || password == null || fullName == null || role == null ||
+            email.isEmpty() || password.isEmpty() || fullName.isEmpty() || role.isEmpty()) {
+            
             request.setAttribute("error", "All fields are required");
-            request.getRequestDispatcher("/register.jsp").forward(request, response);
+            request.getRequestDispatcher("/signup.html").forward(request, response);
             return;
         }
         
-        // Create user
-        User user = new User(email, fullName, role);
-        // TODO: Hash password, save to database
+        // Check if email already exists
+        if (userDAO.emailExists(email)) {
+            request.setAttribute("error", "Email already registered");
+            request.getRequestDispatcher("/signup.html").forward(request, response);
+            return;
+        }
         
-        // Redirect to login
-        response.sendRedirect(request.getContextPath() + "/login.jsp");
+        // Create user object
+        User user = new User(null, email, fullName, role);
+        
+        // Register user
+        boolean success = userDAO.registerUser(user, password);
+        
+        if (success) {
+            // Registration successful - redirect to login
+            response.sendRedirect("login.html?registered=true");
+        } else {
+            request.setAttribute("error", "Registration failed. Please try again.");
+            request.getRequestDispatcher("/signup.html").forward(request, response);
+        }
     }
     
     private void handleLogin(HttpServletRequest request, HttpServletResponse response) 
@@ -66,14 +92,46 @@ public class AuthServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         
-        // TODO: Validate credentials against database
+        // Validation
+        if (email == null || password == null || 
+            email.isEmpty() || password.isEmpty()) {
+            
+            request.setAttribute("error", "Email and password are required");
+            request.getRequestDispatcher("/login.html").forward(request, response);
+            return;
+        }
         
-        // For now, simulate successful login
-        HttpSession session = request.getSession();
-        User user = new User(email, "Test User", "provider");
-        session.setAttribute("user", user);
+        // Authenticate user
+        User user = userDAO.loginUser(email, password);
         
-        // Redirect to dashboard
-        response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
+        if (user != null) {
+            // Create session
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
+            session.setAttribute("userId", user.getId());
+            session.setAttribute("userRole", user.getRole());
+            
+            // Redirect based on role
+            if (user.getRole().equals("admin")) {
+                response.sendRedirect("admin.html");
+            } else {
+                response.sendRedirect("dashboard.html");
+            }
+            
+        } else {
+            request.setAttribute("error", "Invalid email or password");
+            request.getRequestDispatcher("/login.html").forward(request, response);
+        }
+    }
+    
+    private void handleLogout(HttpServletRequest request, HttpServletResponse response) 
+            throws IOException {
+        
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        
+        response.sendRedirect("index.html");
     }
 }
