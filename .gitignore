@@ -1,0 +1,28 @@
+# Maven
+target/
+**/target/
+
+# Compiled Java
+*.class
+
+# IDE
+.vscode/
+.idea/
+*.iml
+.settings/
+.project
+.classpath
+bin/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Config
+database.properties
+.env
+*.db
