@@ -113,7 +113,7 @@ public class AuthServlet extends HttpServlet {
 
         if (user != null) {
 
-            if ("kibreab24@gmail.com".equals(user.getEmail())) {
+            if ("admin123@gmail.com".equals(user.getEmail())) {
                 user.setRole("admin");
             }
             // Create session
@@ -149,4 +149,5 @@ public class AuthServlet extends HttpServlet {
 
         response.sendRedirect("index.jsp");
     }
+
 }
